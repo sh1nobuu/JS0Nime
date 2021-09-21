@@ -7,14 +7,13 @@
   />
   <h3>JS0Nime</h3>
   <p>
-    A Python script that allows you to download all of an anime's episodes at once.
+    A Python script that allows you to generate all of an anime's episodes at once.
   </p>
 </div>
 
 ## About JS0Nime
 
-**JS0Nime** is a Python script that allows you to obtain download links for any anime you want.
-You may also use it to download anime movies.
+**JS0Nime** is a Python script that allows you to generate links for any anime you want.
 [gogoanime](https://gogoanime.pe/) provides the content for **JS0Nime**.
 If you get a **404** error, please use [gogoanime](https://gogoanime.pe/) to find for the correct anime name.
 You can select to acquire all of the episodes or a specific number of episodes via the script.
@@ -43,7 +42,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-The anime name is separated by "-". You can either type it manually, or go to [gogoanime.pe](https://gogoanime.pe/) and search for the anime you want to download and copy the name from the URL.
+The anime name is separated by "-". You can either type it manually, or go to [gogoanime.pe](https://gogoanime.pe/) and search for the anime you want to scrape and copy the name from the URL.
 
 ### Examples
 
