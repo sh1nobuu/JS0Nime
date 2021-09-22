@@ -3,6 +3,7 @@ import json
 import requests as req
 import re
 import os
+from colorama import Fore
 from bs4 import BeautifulSoup
 from dataclasses import dataclass
 
@@ -16,6 +17,7 @@ class Generate:
     all_episodes: int
     episode_start: int
     episode_end: int
+    printed: bool = False
 
     def get_links(self, source=None) -> list[str]:
         if source is not None:
@@ -65,8 +67,14 @@ class Generate:
                 link = soup.find("div", {"class": "mirror_link"}).find(
                     "div", {"class": "dowload"}
                 )
-        # episode_name: str, episode_link: str
-        return f"Episode {download_link.split('+')[-1]}", link.a.get("href")
+                if not self.printed:
+                    CustomMessage(None, self.episode_quality).qual_not_found()
+                    self.episode_quality = link.text.split()[1][1:]
+                    CustomMessage(None, self.episode_quality).use_default_qual()
+                    self.printed = True
+        return f"Episode {download_link.split('+')[-1]}", link.a.get(
+            "href"
+        )  # episode_name: str, episode_link: str
 
     def episodes_to_json(self, episodes):
         episodes_json = {
@@ -77,14 +85,25 @@ class Generate:
         json_file = os.path.join(self.folder, f"{self.name}-episodes.json")
         with open(json_file, "w") as file:
             json.dump(episodes_json, file, ensure_ascii=False, indent=4)
-        return f"File saved in {self.name}-episodes.json"
+        return f"[{Fore.GREEN}+{Fore.RESET}] File saved in {Fore.LIGHTCYAN_EX}{self.name}-episodes.json{Fore.RESET}"
 
 
 @dataclass(init=True)
-class CustomError(Exception):
-    """Custom exception that will accept message as a parameter and it will print it on the console."""
+class CustomMessage(Exception):
+    """Custom message that will accept message as a parameter and it will print it on the console."""
 
-    message: str
+    message: str = None
+    episode_quality: str = None
 
     def print_error(self) -> str:
         print(self.message)
+
+    def qual_not_found(self) -> str:
+        print(
+            f"[{Fore.RED}-{Fore.RESET}] {Fore.LIGHTCYAN_EX}{self.episode_quality}{Fore.RESET} quality not found."
+        )
+
+    def use_default_qual(self) -> str:
+        print(
+            f"[{Fore.GREEN}+{Fore.RESET}] Using {Fore.LIGHTCYAN_EX}{self.episode_quality}{Fore.RESET} as a default quality."
+        )
